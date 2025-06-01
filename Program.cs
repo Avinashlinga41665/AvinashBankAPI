@@ -1,34 +1,32 @@
 var builder = WebApplication.CreateBuilder(args);
 
-
-
+// Configure CORS to allow your GitHub Pages domain
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.AllowAnyOrigin()
+        policy.WithOrigins("https://avinashlinga41665.github.io") // Allow your Angular app domain
               .AllowAnyMethod()
               .AllowAnyHeader();
     });
 });
 
-// Add services to the container.
-
+// Add services
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Use Swagger in development
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseCors();
 
+// Enable CORS middleware
+app.UseCors();
 
 app.UseHttpsRedirection();
 
