@@ -5,7 +5,7 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("https://avinashlinga41665.github.io") // Allow your Angular app domain
+        policy.WithOrigins("https://avinashlinga41665.github.io") 
               .AllowAnyMethod()
               .AllowAnyHeader();
     });
