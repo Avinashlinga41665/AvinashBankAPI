@@ -1,0 +1,6 @@
+@AvinashBackEndAPI_HostAddress = http://localhost:5062
+
+GET {{AvinashBackEndAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
