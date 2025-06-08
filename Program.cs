@@ -5,7 +5,7 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(policy =>
     {
-        policy.WithOrigins("https://avinashlinga41665.github.io") 
+        policy.WithOrigins("https://avinashlinga41665.github.io")
               .AllowAnyMethod()
               .AllowAnyHeader();
     });
@@ -31,6 +31,8 @@ app.UseCors();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
+app.MapGet("/", () => "Bank API is running!");
 
 app.MapControllers();
 
