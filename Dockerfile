@@ -1,18 +1,13 @@
-# Use the official .NET SDK image to build the app
+# Use .NET 8 SDK image to build and publish the app
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
+WORKDIR /app
+
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+COPY . .
+RUN dotnet publish -c Release -o /app/publish
+
+FROM base AS final
 WORKDIR /app
-
-# Copy everything and build the app
-COPY . ./
-RUN dotnet publish -c Release -o out
-
-# Use the ASP.NET runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:9.0
-WORKDIR /app
-COPY --from=build /app/out ./
-
-# Expose the default port
-EXPOSE 80
-
-# Start the app
-ENTRYPOINT ["dotnet", "AvinashBackEndAPI.dll"]
+COPY --from=build /app/publish .
+ENTRYPOINT ["dotnet", "AvinashBankEndAPI.dll"]
