@@ -1,5 +1,4 @@
 using Microsoft.EntityFrameworkCore;
-using System;
 using AvinashBackEndAPI.Data;
 using AvinashBackEndAPI.Models;
 
@@ -16,6 +15,7 @@ builder.Services.AddCors(options =>
     });
 });
 
+// Configure PostgreSQL connection
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
