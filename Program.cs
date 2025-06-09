@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using AvinashBackEndAPI.Data;
+using AvinashBackEndAPI.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -46,3 +47,20 @@ app.MapGet("/", () => "Bank API is running!");
 app.MapControllers();
 
 app.Run();
+
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    context.Database.EnsureCreated();
+
+    if (!context.Users.Any())
+    {
+        context.Users.AddRange(
+            new Login { Userloginname = "avinash", Userloginpwd = "1234567" },
+            new Login { Userloginname = "john", Userloginpwd = "password123" },
+            new Login { Userloginname = "jane", Userloginpwd = "qwerty" }
+        );
+        context.SaveChanges();
+    }
+}
+
