@@ -3,7 +3,6 @@ using System;
 using AvinashBackEndAPI.Data;
 using AvinashBackEndAPI.Models;
 
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure CORS to allow your GitHub Pages domain
@@ -17,37 +16,16 @@ builder.Services.AddCors(options =>
     });
 });
 
-
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Add services
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Use Swagger in development
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-// Enable CORS middleware
-app.UseCors();
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapGet("/", () => "Bank API is running!");
-
-app.MapControllers();
-
-app.Run();
-
+// Seed database BEFORE starting the app
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -64,3 +42,20 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
+app.UseCors();
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+app.MapGet("/", () => "Bank API is running!");
+
+app.MapControllers();
+
+app.Run();
