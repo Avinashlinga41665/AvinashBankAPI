@@ -24,4 +24,10 @@ public class LoginController : ControllerBase
 
         return Ok(new { message = "Login successful" });
     }
+    [HttpGet("all")]
+    public IActionResult GetAllUsers([FromServices] AppDbContext context)
+    {
+        var users = context.Users.ToList();
+        return Ok(users);
+    }
 }

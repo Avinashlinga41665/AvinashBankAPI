@@ -57,8 +57,8 @@ using (var scope = app.Services.CreateScope())
     {
         context.Users.AddRange(
             new Login { Userloginname = "avinash", Userloginpwd = "1234567" },
-            new Login { Userloginname = "john", Userloginpwd = "password123" },
-            new Login { Userloginname = "jane", Userloginpwd = "qwerty" }
+            new Login { Userloginname = "sowmya", Userloginpwd = "password123" },
+            new Login { Userloginname = "archutha", Userloginpwd = "qwerty" }
         );
         context.SaveChanges();
     }
