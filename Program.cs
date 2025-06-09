@@ -1,3 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+using System;
+using AvinashBackEndAPI.Data;
+
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Configure CORS to allow your GitHub Pages domain
@@ -10,6 +15,10 @@ builder.Services.AddCors(options =>
               .AllowAnyHeader();
     });
 });
+
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services
 builder.Services.AddControllers();

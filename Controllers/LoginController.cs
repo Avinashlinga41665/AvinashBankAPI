@@ -1,26 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AvinashBackEndAPI.Data;
 using AvinashBackEndAPI.Models;
+using Microsoft.AspNetCore.Mvc;
 
-namespace AvinashBackEndAPI.Controllers
+[ApiController]
+[Route("api/[controller]")]
+public class LoginController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class LoginController : ControllerBase
-    {
-        [HttpPost]
-        public IActionResult Login([FromBody] Login login)
-        {
-            var validUsername = "avinash";
-            var validPassword = "1234567";
+    private readonly AppDbContext _context;
 
-            if (login.Userloginname == validUsername && login.Userloginpwd == validPassword)
-            {
-                return Ok(new { message = "Login successful" });
-            }
-            else
-            {
-                return Unauthorized(new { message = "Invalid credentials" });
-            }
-        }
+    public LoginController(AppDbContext context)
+    {
+        _context = context;
+    }
+
+    [HttpPost]
+    public IActionResult Login([FromBody] Login login)
+    {
+        var user = _context.Users.FirstOrDefault(u =>
+            u.Userloginname == login.Userloginname && u.Userloginpwd == login.Userloginpwd);
+
+        if (user == null)
+            return Unauthorized(new { message = "Invalid credentials" });
+
+        return Ok(new { message = "Login successful" });
     }
 }
