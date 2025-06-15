@@ -1,4 +1,4 @@
-using AvinashBackEndAPI.Data;
+﻿using AvinashBackEndAPI.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,24 +10,22 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Enable CORS if needed (for Angular frontend)
+// ✅ Correct & secure CORS configuration (recommended)
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
-        builder => builder
-            .AllowAnyOrigin()
+    options.AddPolicy("AllowFrontend",
+        policy => policy
+            .WithOrigins("https://avinashlinga41665.github.io")
             .AllowAnyMethod()
-            .AllowAnyHeader());
+            .AllowAnyHeader()
+            .AllowCredentials()); // Only needed if you're using cookies or auth headers
 });
 
 var app = builder.Build();
 
-
-app.UseCors("AllowAll");
+app.UseCors("AllowFrontend");
 
 app.UseHttpsRedirection();
-
-
 app.UseAuthorization();
 
 app.MapControllers();
