@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using AvinashBackEndAPI.Data;
 using AvinashBackEndAPI.Models;
+using System.Threading.Tasks;
 
 namespace AvinashBackEndAPI.Controllers
 {
@@ -16,17 +17,22 @@ namespace AvinashBackEndAPI.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register([FromBody] Register model)
+        public async Task<IActionResult> Register([FromBody] Register registration)
         {
-            if (!ModelState.IsValid)
+            // Convert DateOfBirth to UTC if it's not already
+            if (registration.DateOfBirth.Kind == DateTimeKind.Unspecified)
             {
-                return BadRequest(ModelState);
+                registration.DateOfBirth = DateTime.SpecifyKind(registration.DateOfBirth, DateTimeKind.Local).ToUniversalTime();
+            }
+            else
+            {
+                registration.DateOfBirth = registration.DateOfBirth.ToUniversalTime();
             }
 
-            _context.Registrations.Add(model);
-            _context.SaveChanges();
+            _context.Registrations.Add(registration);
+            await _context.SaveChangesAsync();
 
-            return Ok(new { message = "User registered successfully", data = model });
+            return Ok(new { message = "Registration successful", registration.Id });
         }
     }
 }
