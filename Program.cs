@@ -1,52 +1,34 @@
-using Microsoft.EntityFrameworkCore;
-using System;
 using AvinashBackEndAPI.Data;
-using AvinashBackEndAPI.Models;
-
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configure CORS to allow your GitHub Pages domain
-builder.Services.AddCors(options =>
-{
-    options.AddDefaultPolicy(policy =>
-    {
-        policy.WithOrigins("https://avinashlinga41665.github.io")
-              .AllowAnyMethod()
-              .AllowAnyHeader();
-    });
-});
+// Add services to the container.
+builder.Services.AddControllers();
 
-
+// Register DbContext with PostgreSQL
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Add services
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+// Enable CORS if needed (for Angular frontend)
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll",
+        builder => builder
+            .AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader());
+});
 
 var app = builder.Build();
 
-// Use Swagger in development
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
-// Enable CORS middleware
-app.UseCors();
-
+// Configure the HTTP request pipeline.
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.UseCors("AllowAll"); // Apply the CORS policy here
 
-app.MapGet("/", () => "Bank API is running!");
+app.UseAuthorization();
 
 app.MapControllers();
 
 app.Run();
-
-
-
