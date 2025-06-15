@@ -10,19 +10,32 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// ✅ Correct & secure CORS configuration (recommended)
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowFrontend",
-        policy => policy
-            .WithOrigins("https://avinashlinga41665.github.io")
-            .AllowAnyMethod()
-            .AllowAnyHeader()); // Only needed if you're using cookies or auth headers
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("https://avinashlinga41665.github.io")
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
 });
 
 var app = builder.Build();
 
 app.UseCors("AllowFrontend");
+
+app.Use(async (context, next) =>
+{
+    if (context.Request.Method == "OPTIONS")
+    {
+        context.Response.StatusCode = 204; // No Content
+        await context.Response.CompleteAsync();
+    }
+    else
+    {
+        await next();
+    }
+});
 
 app.UseHttpsRedirection();
 app.UseAuthorization();
