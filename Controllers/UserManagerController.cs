@@ -5,13 +5,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace AvinashBackEndAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]")] // This will resolve to api/UserManager
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UserManagerController : ControllerBase
     {
         private readonly AppDbContext _context;
 
-        public UsersController(AppDbContext context)
+        public UserManagerController(AppDbContext context)
         {
             _context = context;
         }
