@@ -17,7 +17,7 @@ builder.Services.AddCors(options =>
         policy => policy
             .WithOrigins("https://avinashlinga41665.github.io")
             .AllowAnyMethod()
-            .AllowAnyHeader()
+            .AllowAnyHeader()); // Only needed if you're using cookies or auth headers
 });
 
 var app = builder.Build();
