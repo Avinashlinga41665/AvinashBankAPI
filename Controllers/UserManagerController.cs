@@ -1,0 +1,44 @@
+﻿using AvinashBackEndAPI.Data;
+using AvinashBackEndAPI.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+
+namespace AvinashBackEndAPI.Controllers
+{
+    public class UserManagerController
+    {
+        [Route("api/[controller]")]
+        [ApiController]
+        public class UsersController : ControllerBase
+        {
+            private readonly AppDbContext _context;
+
+            public UsersController(AppDbContext context)
+            {
+                _context = context;
+            }
+
+            [HttpGet]
+            public async Task<IActionResult> GetUsers(string? lastname = null, string? id = null)
+            {
+                IQueryable<Register> query = _context.Registrations;
+
+                if (!string.IsNullOrEmpty(id))
+                {
+                    return Ok(await query.Where(u => u.Id.ToString() == id).ToListAsync());
+                }
+
+                if (!string.IsNullOrEmpty(lastname))
+                {
+                    if (lastname == "*")
+                        return Ok(await query.ToListAsync());
+
+                    return Ok(await query.Where(u => u.LastName.ToLower().Contains(lastname.ToLower())).ToListAsync());
+                }
+
+                return BadRequest("Please provide either lastname or userId.");
+            }
+        }
+
+    }
+}

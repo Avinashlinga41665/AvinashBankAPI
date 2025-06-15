@@ -3,13 +3,14 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// 1. Add services
 builder.Services.AddControllers();
 
-// Register DbContext with PostgreSQL
+// 2. Register DbContext
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// 3. Add named CORS policy
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
@@ -22,24 +23,18 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// 4. Middleware order is critical!
+
+// Enable CORS first
 app.UseCors("AllowFrontend");
 
-app.Use(async (context, next) =>
-{
-    if (context.Request.Method == "OPTIONS")
-    {
-        context.Response.StatusCode = 204; // No Content
-        await context.Response.CompleteAsync();
-    }
-    else
-    {
-        await next();
-    }
-});
-
+// Optional (HTTPS redirect, not needed on Render as it's handled outside)
 app.UseHttpsRedirection();
+
+// Routing and auth
 app.UseAuthorization();
 
+// Map controllers
 app.MapControllers();
 
 app.Run();
