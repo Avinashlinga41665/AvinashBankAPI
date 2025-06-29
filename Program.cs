@@ -40,8 +40,11 @@ if (builder.Environment.IsDevelopment())
 }
 else
 {
-    builder.Services.AddDbContext<AppDbContext>(options =>
-        options.UseNpgsql(connectionString)); // Production = PostgreSQL
+    using (var scope = app.Services.CreateScope())
+    {
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        db.Database.Migrate(); // 🚀 Apply pending migrations automatically at startup
+    }
 }
 
 // CORS
