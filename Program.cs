@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Load config files & env vars
+// Load config
 builder.Configuration
     .SetBasePath(Directory.GetCurrentDirectory())
     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
@@ -12,10 +12,10 @@ builder.Configuration
 
 Console.WriteLine($"Environment: {builder.Environment.EnvironmentName}");
 
-// Pick connection string
+// Get connection string
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// If using a DATABASE_URL from Render dashboard, override:
+// If you use Render's DATABASE_URL, override:
 var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
 if (!string.IsNullOrEmpty(databaseUrl))
 {
@@ -29,22 +29,28 @@ else
 
 Console.WriteLine($"Connection string: {connectionString}");
 
-// Register DbContext for both dev and prod
-if (builder.Environment.IsDevelopment())
+// ✅ ✅ ✅ Forced provider override for local migrations:
+bool usePostgreSqlLocally = true; // <<<<< CHANGE THIS WHEN RUNNING LOCAL MIGRATIONS
+
+if (builder.Environment.IsDevelopment() && !usePostgreSqlLocally)
 {
+    Console.WriteLine("➡️ Using SQL Server (local dev)");
     builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseSqlServer(connectionString));
 }
 else
 {
+    Console.WriteLine("➡️ Using PostgreSQL (Render or local migrations)");
     builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseNpgsql(connectionString));
 }
 
+// Services
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
@@ -68,16 +74,18 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// Apply migrations automatically in prod
+if (!app.Environment.IsDevelopment())
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        db.Database.Migrate();
+    }
+}
+
 app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");
 app.UseAuthorization();
 app.MapControllers();
-
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.Migrate();
-    Console.WriteLine(" EF Core migration applied (if any).");
-}
-
 app.Run();
