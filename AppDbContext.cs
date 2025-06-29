@@ -7,7 +7,6 @@ namespace AvinashBackEndAPI.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        // ✅ Correct names
         public DbSet<User> Users { get; set; }
         public DbSet<ScheduleTransfer> ScheduleTransfers { get; set; }
         public DbSet<Account> Accounts { get; set; }
@@ -19,6 +18,8 @@ namespace AvinashBackEndAPI.Data
                 .HasMany(u => u.ScheduleTransfers)
                 .WithOne(st => st.User)
                 .HasForeignKey(st => st.UserID);
+
+          
 
             modelBuilder.Entity<Account>()
                 .HasMany(a => a.DebitTransactions)
@@ -32,5 +33,6 @@ namespace AvinashBackEndAPI.Data
                 .HasForeignKey(t => t.CreditAccountId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
+
     }
 }

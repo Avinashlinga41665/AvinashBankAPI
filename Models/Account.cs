@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AvinashBackEndAPI.Models
 {
@@ -6,6 +7,7 @@ namespace AvinashBackEndAPI.Models
     {
         [Key]
         public int Id { get; set; }
+        public int UserID { get; set; }
 
         [Required]
         public string AccountNumber { get; set; }
@@ -14,13 +16,13 @@ namespace AvinashBackEndAPI.Models
 
         public string AccountType { get; set; }
 
-        public string Status { get; set; }
+        public Boolean Status { get; set; }
 
-        // 1 Account → Many Debit Transactions
         public List<Transaction> DebitTransactions { get; set; }
 
-        // 1 Account → Many Credit Transactions
         public List<Transaction> CreditTransactions { get; set; }
+        [ForeignKey("UserID")]
+        public User User { get; set; }
     }
     public class Transaction
     {
@@ -39,11 +41,9 @@ namespace AvinashBackEndAPI.Models
 
         public string Description { get; set; }
 
-        // FK for Debit Account
         public int DebitAccountId { get; set; }
         public Account DebitAccount { get; set; }
 
-        // FK for Credit Account
         public int CreditAccountId { get; set; }
         public Account CreditAccount { get; set; }
     }

@@ -9,6 +9,10 @@ namespace AvinashBackEndAPI.Models
 
         [Required]
         public string AadharNumber { get; set; }
+        [Required]
+        public string AccountNumber { get; set; }
+
+        public string AccountType { get; set; }
 
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -26,6 +30,8 @@ namespace AvinashBackEndAPI.Models
         public string PasswordHash { get; set; }
 
         public List<ScheduleTransfer> ScheduleTransfers { get; set; }
+        public List<Account> Accounts { get; set; }
+
     }
 
 }

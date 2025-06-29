@@ -27,6 +27,8 @@
                 var user = new User
                 {
                     AadharNumber = dto.AadharNumber,
+                    AccountNumber = dto.AccountNumber,
+                    AccountType = dto.AccountType,
                     FirstName = dto.FirstName,
                     LastName = dto.LastName,
                     MobileNumber = dto.MobileNumber,
@@ -44,6 +46,7 @@
 
                 _context.Users.Add(user);
                 await _context.SaveChangesAsync();
+                await DummyAccountSummaryData(user.Id, dto.AccountNumber, dto.AccountType);
 
                 return Ok(new { message = "Registration successful", user.Id });
             }
@@ -62,7 +65,34 @@
                 if (!isPasswordValid)
                     return Unauthorized(new { message = "Invalid credentials" });
 
-                return Ok(new { message = "Login successful" });
+                var accounts = _context.Accounts.Where(a => a.UserID == user.Id).Select(a => new {
+                                                                                a.AccountNumber,
+                                                                                a.AccountType,
+                                                                                a.Balance,
+                                                                                a.Status
+                                                                                }).ToList();
+
+                return Ok(new { message = "Login successful",
+                    userId = user.Id,
+                    loginName = user.LoginName,
+                    lastName = user.LastName,
+                    accounts = accounts
+
+                });
+            }
+            [NonAction]
+            public async Task DummyAccountSummaryData(int id, string accountNumber,string accountType)
+            {
+                var DummyData = new Account
+                {
+                    UserID = id,
+                    AccountNumber = accountNumber,
+                    AccountType = accountType,
+                    Balance = 3000,
+                    Status = true
+                };
+                _context.Accounts.Add(DummyData);
+                await _context.SaveChangesAsync();
             }
 
         }
