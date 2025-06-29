@@ -7,7 +7,6 @@ namespace AvinashBackEndAPI.Models
     {
         [Key]
         public int Id { get; set; }
-        public int UserID { get; set; }
 
         [Required]
         public string AccountNumber { get; set; }
@@ -21,7 +20,7 @@ namespace AvinashBackEndAPI.Models
         public List<Transaction> DebitTransactions { get; set; }
 
         public List<Transaction> CreditTransactions { get; set; }
-        [ForeignKey("UserID")]
+        public int UserId { get; set; }
         public User User { get; set; }
     }
     public class Transaction

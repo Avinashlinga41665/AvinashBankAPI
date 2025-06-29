@@ -65,7 +65,7 @@
                 if (!isPasswordValid)
                     return Unauthorized(new { message = "Invalid credentials" });
 
-                var accounts = _context.Accounts.Where(a => a.UserID == user.Id).Select(a => new {
+                var accounts = _context.Accounts.Where(a => a.UserId == user.Id).Select(a => new {
                                                                                 a.AccountNumber,
                                                                                 a.AccountType,
                                                                                 a.Balance,
@@ -85,7 +85,7 @@
             {
                 var DummyData = new Account
                 {
-                    UserID = id,
+                    UserId = id,
                     AccountNumber = accountNumber,
                     AccountType = accountType,
                     Balance = 3000,

@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace AvinashBackEndAPI.MigrationsSqlServer
+namespace AvinashBackEndAPI.MigrationsPostgreSql
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250629145313_LocalDB5")]
-    partial class LocalDB5
+    [Migration("20250629181830_FixedAccountUserRelation")]
+    partial class FixedAccountUserRelation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

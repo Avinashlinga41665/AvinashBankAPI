@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace AvinashBackEndAPI.MigrationsSqlServer
+namespace AvinashBackEndAPI.MigrationsPostgreSql
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250629145943_LocalDB6")]
-    partial class LocalDB6
+    [Migration("20250629183128_DB3")]
+    partial class DB3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,12 +47,12 @@ namespace AvinashBackEndAPI.MigrationsSqlServer
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
 
-                    b.Property<int>("UserID")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Accounts");
                 });
@@ -202,7 +202,7 @@ namespace AvinashBackEndAPI.MigrationsSqlServer
                 {
                     b.HasOne("AvinashBackEndAPI.Models.User", "User")
                         .WithMany("Accounts")
-                        .HasForeignKey("UserID")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

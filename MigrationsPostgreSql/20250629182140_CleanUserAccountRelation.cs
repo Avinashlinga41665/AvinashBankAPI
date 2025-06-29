@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace AvinashBackEndAPI.MigrationsSqlServer
+namespace AvinashBackEndAPI.MigrationsPostgreSql
 {
     /// <inheritdoc />
-    public partial class LocalDB4 : Migration
+    public partial class CleanUserAccountRelation : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

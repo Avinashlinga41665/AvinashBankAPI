@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace AvinashBackEndAPI.MigrationsSqlServer
+namespace AvinashBackEndAPI.MigrationsPostgreSql
 {
     /// <inheritdoc />
-    public partial class UpdateSqlServer6 : Migration
+    public partial class FixedAccountUserRelation : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
