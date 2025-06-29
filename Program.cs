@@ -33,7 +33,7 @@ builder.Services.AddCors(options =>
     {
         policy
             .WithOrigins(
-                "https://avinashlinga.github.io", 
+                "https://avinashlinga41665.github.io", 
                 "http://localhost:4200"     
             )
             .AllowAnyHeader()
