@@ -20,7 +20,6 @@ namespace AvinashBackEndAPI.Data
                 .HasForeignKey(st => st.UserID);
 
           
-
             modelBuilder.Entity<Account>()
                 .HasMany(a => a.DebitTransactions)
                 .WithOne(t => t.DebitAccount)
