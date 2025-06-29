@@ -31,13 +31,13 @@
                     LastName = dto.LastName,
                     MobileNumber = dto.MobileNumber,
                     Email = dto.Email,
-                    LoginID = dto.LoginID, 
+                    LoginName = dto.LoginName, 
                     DateOfBirth = dto.DateOfBirth.Kind == DateTimeKind.Unspecified
                         ? DateTime.SpecifyKind(dto.DateOfBirth, DateTimeKind.Local).ToUniversalTime()
                         : dto.DateOfBirth.ToUniversalTime(),
                     PasswordHash = BCrypt.HashPassword(dto.Password)
                 };
-                if (_context.Users.Any(u => u.LoginID == dto.LoginID))
+                if (_context.Users.Any(u => u.LoginName == dto.LoginName))
                 {
                     return BadRequest(new { message = "LoginID already exists." });
                 }
@@ -51,7 +51,7 @@
             [HttpPost("login")]
             public IActionResult Login([FromBody] LoginDTO loginRequest)
             {
-                var user = _context.Users.FirstOrDefault(u => u.LoginID == loginRequest.LoginID);
+                var user = _context.Users.FirstOrDefault(u => u.LoginName == loginRequest.LoginName);
 
 
                 if (user == null)

@@ -21,8 +21,7 @@ namespace AvinashBackEndAPI.Models
         public string MobileNumber { get; set; }
 
         [Required]
-        public string LoginID { get; set; }
-
+        public string LoginName { get; set; }
         [Required]
         public string PasswordHash { get; set; }
 
