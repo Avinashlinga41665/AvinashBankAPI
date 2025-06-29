@@ -19,7 +19,7 @@ namespace AvinashBackEndAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetUsers(string? lastname = null, string? id = null)
         {
-            IQueryable<Register> query = _context.Registrations;
+            IQueryable<User> query = _context.Users;
 
             if (!string.IsNullOrEmpty(id))
             {

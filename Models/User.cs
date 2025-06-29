@@ -2,7 +2,7 @@
 
 namespace AvinashBackEndAPI.Models
 {
-    public class Register
+    public class User
     {
         [Key]
         public int Id { get; set; }
@@ -10,16 +10,8 @@ namespace AvinashBackEndAPI.Models
         [Required]
         public string AadharNumber { get; set; }
 
-        [Required]
-        public string AccountNumber { get; set; }
-
-        [Required]
-        public string AccountType { get; set; }
-
-        [Required]
+        public string FirstName { get; set; }
         public string LastName { get; set; }
-
-        [Required]
         public DateTime DateOfBirth { get; set; }
 
         [Required, EmailAddress]
@@ -28,5 +20,13 @@ namespace AvinashBackEndAPI.Models
         [Required]
         public string MobileNumber { get; set; }
 
+        [Required]
+        public string LoginID { get; set; }
+
+        [Required]
+        public string PasswordHash { get; set; }
+
+        public List<ScheduleTransfer> ScheduleTransfers { get; set; }
     }
+
 }
