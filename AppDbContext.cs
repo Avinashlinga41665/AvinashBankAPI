@@ -8,9 +8,11 @@ namespace AvinashBackEndAPI.Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<ScheduleTransfer> ScheduleTransfers { get; set; }
+        public DbSet<Transfer> ScheduleTransfers { get; set; }
         public DbSet<Account> Accounts { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
+        public DbSet<AccountTable> TransferTable { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

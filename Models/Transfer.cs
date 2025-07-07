@@ -2,7 +2,7 @@
 
 namespace AvinashBackEndAPI.Models
 {
-    public class ScheduleTransfer
+    public class Transfer
     {
         [Key]
         public int Id { get; set; }
@@ -11,10 +11,10 @@ namespace AvinashBackEndAPI.Models
         public string TransferID { get; set; }
 
         [Required]
-        public string DebitAccountNumber { get; set; }
+        public string fromAccount { get; set; }
 
         [Required]
-        public string CreditAccountNumber { get; set; }
+        public string toAccount { get; set; }
 
         public decimal Amount { get; set; }
 

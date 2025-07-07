@@ -26,7 +26,9 @@ namespace AvinashBackEndAPI.Models
     public class Transaction
     {
         [Key]
-        public int Id { get; set; }
+        public int TransId { get; set; }
+
+        public int UserId { get; set; }
 
         public string TransferID { get; set; }
 
@@ -36,7 +38,7 @@ namespace AvinashBackEndAPI.Models
 
         public DateTime TimeOfTransfer { get; set; }
 
-        public string Status { get; set; }
+        public bool TransactionStatus { get; set; }
 
         public string Description { get; set; }
 

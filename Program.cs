@@ -12,37 +12,35 @@ builder.Configuration
 
 Console.WriteLine($"Environment: {builder.Environment.EnvironmentName}");
 
-// Get connection string
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+// Decide whether to use Postgres or SQL Server
+var usePostgreSql = builder.Configuration.GetValue<bool>("UsePostgreSql");
+Console.WriteLine($"➡️ UsePostgreSql flag: {usePostgreSql}");
 
-// If you use Render's DATABASE_URL, override:
+// Pick connection string
+var connectionString = usePostgreSql
+    ? builder.Configuration.GetConnectionString("PostgreSql")
+    : builder.Configuration.GetConnectionString("SqlServer");
+
+// If you want DATABASE_URL override for Render:
 var databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
 if (!string.IsNullOrEmpty(databaseUrl))
 {
     connectionString = databaseUrl;
     Console.WriteLine("Using DATABASE_URL env var instead of appsettings.json");
 }
-else
-{
-    Console.WriteLine("Using connection string from appsettings.json");
-}
 
-Console.WriteLine($"Connection string: {connectionString}");
+Console.WriteLine($"Final connection string: {connectionString}");
 
-// ✅ ✅ ✅ Forced provider override for local migrations:
-bool usePostgreSqlLocally = true; // <<<<< CHANGE THIS WHEN RUNNING LOCAL MIGRATIONS
-
-if (builder.Environment.IsDevelopment() && !usePostgreSqlLocally)
+// Register DB context
+if (usePostgreSql)
 {
-    Console.WriteLine("➡️ Using SQL Server (local dev)");
-    builder.Services.AddDbContext<AppDbContext>(options =>
-        options.UseSqlServer(connectionString));
-}
-else
-{
-    Console.WriteLine("➡️ Using PostgreSQL (Render or local migrations)");
     builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseNpgsql(connectionString));
+}
+else
+{
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseSqlServer(connectionString));
 }
 
 // Services
